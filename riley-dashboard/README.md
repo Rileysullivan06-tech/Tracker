@@ -1,20 +1,52 @@
-# Riley Dashboard
+# Riley Dashboard V2
 
-A personal school/work/life dashboard for Fall 2026.
+A personal school/work/life + markets/news command center for Fall 2026.
 
-## What is already built
+## V2 redesign
 
-- Recurring class schedule for GNED 1202, MGMT 3230, ACCT 3224 and FNCE 3227.
-- Recurring work schedule: Tue 5:00–9:15 PM, Wed 4:00 PM–12:00 AM, Thu 4:45 PM–12:00 AM.
-- Audited assessment/deadline database from the four course outlines.
-- Smart Study Planner that estimates preparation time and auto-schedules sessions around fixed commitments.
-- Manual override for every study-time estimate.
-- Weekly calendar and Today view.
-- Persistent personal to-do list using browser localStorage.
-- Persistent completed study/deadline states using browser localStorage.
-- Portfolio watchlist with server-side Yahoo Finance quote retrieval.
-- Daily Top + Markets headlines via server-side Google News RSS retrieval.
-- Responsive dark dashboard UI.
+- Compact opening dashboard focused on Today, Upcoming, Markets, and News.
+- Real time-grid calendar with Day / Week / Month views.
+- Native drag-and-drop for flexible calendar blocks and planner-generated study sessions.
+- Resizable flexible blocks.
+- Manual custom events with recurrence and lock/flexible state.
+- Distinction between locked constraints, manually positioned study blocks, and automatic study blocks.
+- Smart Study Planner preserved and extended with scheduling preferences.
+- Deleting/shortening an automatic study session returns missing time to the planner instead of reducing the required workload.
+- Explicit Replan action plus visible unplaced-work/conflict status.
+- Upcoming assessments show course weight, countdown, study progress, scheduled time, and unplaced time where available.
+- Configurable pinned market widgets.
+- Intraday sparklines use the existing Yahoo Finance data source when intraday data is available; the UI shows an unavailable state rather than inventing chart data.
+- Compact news list using the existing Google News RSS integration.
+- Existing browser-local persistence retained and extended.
+
+## Data and persistence
+
+Existing keys are preserved:
+
+- `riley.completedEvents`
+- `riley.completedSessions`
+- `riley.estimateOverrides`
+- `riley.studyProgress`
+- `riley.todos`
+
+V2 adds:
+
+- `riley.customEvents`
+- `riley.manualStudy`
+- `riley.studyBlackouts`
+- `riley.plannerPrefs`
+- `riley.pinnedSymbols`
+
+All persistence remains browser-local. No account, backend database, or cross-device sync was added.
+
+## Market/news integrations
+
+No API keys are required.
+
+- Quotes + intraday chart points: Yahoo Finance chart endpoint through `/api/quotes`.
+- News: Google News RSS through `/api/news`.
+
+These are third-party public endpoints and can throttle or change. The dashboard degrades gracefully when data is unavailable.
 
 ## Run locally
 
@@ -26,21 +58,8 @@ A personal school/work/life dashboard for Fall 2026.
 
 ## Deploy to Vercel
 
-1. Put this folder in a GitHub repository.
-2. Import that repository into Vercel.
-3. Accept the default Next.js settings and deploy.
-4. Bookmark the Vercel URL.
+The project remains a standard Next.js app. Push this folder to the GitHub repo connected to Vercel. Vercel should use the Next.js framework preset and the repository root should point to this `riley-dashboard` folder if it remains nested in the repo.
 
-No API keys are required for the current live quote/news implementation. The feeds are third-party public endpoints and can occasionally throttle or change. The UI handles failed rows without breaking the dashboard.
+## Academic-data note
 
-## Data/persistence note
-
-Tasks, completed items, and study-estimate overrides are stored in browser localStorage. That means they persist on the same browser/device. A later version can swap this for Supabase if cross-device sync/login is desired.
-
-## Important academic-data note
-
-The source outlines leave some dates unknown or D2L-only. Those are intentionally not invented:
-- GNED participation activity dates are on D2L.
-- GNED detailed reading dates/last-minute changes are on D2L.
-- Registrar-set final exam dates remain TBD.
-- Business Law's Fall schedule says the final window is Dec 11–21, while another sentence in the outline incorrectly references Apr 15–25. The dashboard therefore keeps the exact final date as TBD.
+Existing Fall 2026 academic data was retained. Unknown source dates remain unknown rather than being invented, including registrar-set final exam dates and D2L-only dates.
